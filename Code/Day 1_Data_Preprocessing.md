@@ -23,20 +23,28 @@ Y = dataset.iloc[ : , 3].values  // : 全部行 or 列；[a]第a行 or 列
 ## 第3步：处理丢失数据
 ```python
 from sklearn.preprocessing import Imputer
+//创建Imputer器
 imputer = Imputer(missing_values = "NaN", strategy = "mean", axis = 0)
+//fit是计算矩阵缺失值外的相关值的大小，以便填充其他缺失数据矩阵时进行使用
+//transform是对矩阵缺失值进行填充
+//fit_transform是上述两者的结合体
 imputer = imputer.fit(X[ : , 1:3])
 X[ : , 1:3] = imputer.transform(X[ : , 1:3])
 ```
 ## 第4步：解析分类数据
 ```python
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+//fit_transform填补缺失值后，对label进行encoder编码
 labelencoder_X = LabelEncoder()
 X[ : , 0] = labelencoder_X.fit_transform(X[ : , 0])
 ```
 ### 创建虚拟变量
 ```python
+//onehotencoder解析：https://blog.csdn.net/qq_35436571/article/details/96426582
+//toArray():将list转化为array
 onehotencoder = OneHotEncoder(categorical_features = [0])
 X = onehotencoder.fit_transform(X).toarray()
+
 labelencoder_Y = LabelEncoder()
 Y =  labelencoder_Y.fit_transform(Y)
 ```
@@ -45,9 +53,11 @@ Y =  labelencoder_Y.fit_transform(Y)
 #from sklearn.model_selection import train_test_split
 from sklearn.cross_validation import train_test_split
 X_train, X_test, Y_train, Y_test = train_test_split( X , Y , test_size = 0.2, random_state = 0)
+//random_state的三种应用场所:https://blog.csdn.net/xiaohutong1991/article/details/107923970
 ```
 ## 第6步：特征量化
 ```python
+//StandardScalar归一化：https://blog.csdn.net/wzyaiwl/article/details/90549391
 from sklearn.preprocessing import StandardScaler
 sc_X = StandardScaler()
 X_train = sc_X.fit_transform(X_train)
